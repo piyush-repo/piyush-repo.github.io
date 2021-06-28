@@ -69,7 +69,7 @@
                             <h5 class="card-title">{{hco.activity.individual.firstName}}  {{hco.activity.individual.lastName}}</h5>
                             <p class="card-text"><b>OfcAddress :</b> <i>{{hco.activity.workplace.address.longLabel}}, {{hco.activity.workplace.address.city.label}}, {{hco.activity.workplace.address.city.label}}, {{hco.activity.workplace.address.country}}</i></p>
                             <a href="https://www.google.com/maps/search/?api=1&query={{hco.activity.workplace.address.location.lat}},{{hco.activity.workplace.address.location.lon}}"
-                            ><img src="location.png" height="33px">{{hco.activity.calculatedDistance}} Km</a>
+                            ><img src="location.png" height="33px">{{hco.calculatedDistance}} Km</a>
                             <button id="inquiry{{$index}}" class="btn btn-primary inquirybtn"
                                 ng-click='postInquiry($index, hco.activity.individual.firstName)' >Inquiry</button>
                         </div>
@@ -83,13 +83,13 @@
             <!-- Modal content -->
             <div class="modal-content">
                 <span class="close">&times;</span>
-                Physician: {{selectedDoctor}}<br>
-                Patient Name : <input id='Name' type="text">
-                Inquiry: <textarea id='Inquiry'></textarea><br>
-                Contact Details: <input id='ContactDetails' type="text">
+                <b>Physician:</b> {{selectedDoctor}}<br>
+                <b>Patient Name :</b> <input id='Name' type="text">
+                <b>Inquiry :</b> <textarea id='Inquiry'></textarea><br>
+                <b>Contact Details :</b> <input id='ContactDetails' type="text">
                 <button style="padding:10px; margin-top: 22px;" ng-click="submitInquiry()" class="btn btn-primary">Submit
                     Inquiry</button><br>
-                <label ng-show="submissionMsg !== ''">{{submissionMsg}}</label>
+                <label style="color: green;" ng-show="submissionMsg !== ''">{{submissionMsg}} !!!!!</label>
             </div>
 
         </div>

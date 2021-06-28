@@ -5,7 +5,6 @@ app.controller("myCtrl", function ($scope) {
     const distanceThreshold = 13000;
     $scope.hcoList = [];
     $scope.codes = [
-        { 'longLbl': "SPECIALIST/TECHNOLOGIST/TECHNICIAN-OTHER" },
         { 'longLbl': "NURSE PRACTITIONER" },
         { 'longLbl': "CERTIFIED NURSE ANESTHETIST" },
         { 'longLbl': "REGISTERED NURSE" },
@@ -17,8 +16,6 @@ app.controller("myCtrl", function ($scope) {
         { 'longLbl': "OCCUPATIONAL THERAPY" },
         { 'longLbl': "PHYSICIAN ASSISTANT" },
         { 'longLbl': "ADVANCED REGISTERED NURSE" },
-        { 'longLbl': "PSYCHOLOGY" },
-        { 'longLbl': "NURSE MIDWIFE" },
         { 'longLbl': "AUDIOLOGY" },
         { 'longLbl': "UNSPECIFIED" },
         { 'longLbl': "EMERGENCY MEDICINE" },
@@ -27,16 +24,15 @@ app.controller("myCtrl", function ($scope) {
         { 'longLbl': "GENERAL SURGERY" },
         { 'longLbl': "VASCULAR & INTERVENTIONAL RADIOLOGY" },
         { 'longLbl': "NEONATAL-PERINATAL MEDICINE" },
-        { 'longLbl': "PEDIATRICS" },
-        { 'longLbl': "HOSPITALIST" }]
+        { 'longLbl': "PEDIATRICS" }
+    ];
 
-    $scope.doctors = ["John", "Pope", "Miller", "Cirrus", "Ray"];
     $scope.submitIsEnabled = false;
     $scope.submissionMsg = '';
     $scope.coordinates = {
         lat: '',
         long: ''
-    }
+    };
     $scope.postInquiry = (index, selectedDoctor) => {
         $scope.selectedDoctor = selectedDoctor;
         // Get the modal
@@ -68,8 +64,6 @@ app.controller("myCtrl", function ($scope) {
         }
     }
 
-
-
     $scope.enableSubmit = () => {
         const name = document.getElementById('Name');
         const inquiryDetails = document.getElementById('Inquiry');
@@ -79,6 +73,7 @@ app.controller("myCtrl", function ($scope) {
     }
 
     $scope.submitInquiry = () => {
+        $scope.submissionMsg = "";
         const name = document.getElementById('Name');
         const inquiryDetails = document.getElementById('Inquiry');
         const contactDetails = document.getElementById('ContactDetails');
@@ -93,15 +88,16 @@ app.controller("myCtrl", function ($scope) {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition);
         }
-
         function showPosition(position) {
             $scope.coordinates.lat = position.coords.latitude;
             $scope.coordinates.long = position.coords.longitude;
-            // console.log(JSON.stringify($scope.coordinates));
+            console.log(JSON.stringify($scope.coordinates));
         }
     }
+    //3001106b821f9048
 
-    $scope.hclAPI = new HclAPI({ apiKey: '3001106b821f9048' });
+    //30015ce4de47725d
+    $scope.hclAPI = new HclAPI({ apiKey: "30015d4934c30a75"});
 
 
 
@@ -112,15 +108,22 @@ app.controller("myCtrl", function ($scope) {
             country: "US"
         };
 
-        //$scope.activities = await $scope.hclAPI.activities(params);
-        $scope.activitiesWithDistance = dataset.data.activities.map((record) => {
-            record.activity.calculatedDistance = Math.round(distance(
+        $scope.activities = await $scope.hclAPI.activities(params);
+        // $scope.activitiesWithDistance = dataset.data.activities.map((record) => {
+        //     record.calculatedDistance = Math.round(distance(
+        //         $scope.coordinates.lat, $scope.coordinates.long,
+        //         record.activity.workplace.address.location.lat,
+        //         record.activity.workplace.address.location.lon), 2);
+        //     return record;
+        // });
+        $scope.activitiesWithDistance = $scope.activities.activities.map((record) => {
+            record.calculatedDistance = Math.round(distance(
                 $scope.coordinates.lat, $scope.coordinates.long,
                 record.activity.workplace.address.location.lat,
                 record.activity.workplace.address.location.lon), 2);
             return record;
         });
-        //$scope.$apply();
+        $scope.$apply();
     }
 
     $scope.fetchCodesBylabel = async (noOfRecords) => {
@@ -140,7 +143,7 @@ app.controller("myCtrl", function ($scope) {
     $scope.searchHcos = () => {
         console.log($scope.selectedCategory);
         const filteredList = $scope.activitiesWithDistance.filter((record)=>{
-            return _.find(record.activity.individual.specialties, {label : $scope.selectedCategory}) && record.activity.calculatedDistance < distanceThreshold;
+            return _.find(record.activity.individual.specialties, {label : $scope.selectedCategory}) && record.calculatedDistance < distanceThreshold;
         })
         $scope.hcoList = _.orderBy(filteredList, 'calculatedDistance');
     }
@@ -175,5 +178,5 @@ app.controller("myCtrl", function ($scope) {
     $scope.distance = Math.round(distance($scope.coordinates.lat, $scope.coordinates.long, 40.4501, -74.5211), 2);
     $scope.getMyLocation();
     $scope.fetchActivities(1000);
-    $scope.fetchCodesBylabel(100);
+    //$scope.fetchCodesBylabel(100);
 });
