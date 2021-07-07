@@ -11,11 +11,25 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <link rel="stylesheet" href="app.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"> -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
 
     <title>HCO Finder HTML5 Mobile APP</title>
 </head>
 
 <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+        emailjs.init("user_1nyvkM6KdtGRBGn73ywbs");
+        })();
+        </script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
     <script src="data/activities.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
     <script src="https://static.healthcarelocator.com/v1/hcl-sdk-web-ui/hcl-sdk.js"></script>
@@ -37,41 +51,39 @@
                 <h3>Select Category :</h3>
                 <select class="form-select" ng-model="selectedCategory">
                     <option ng-repeat="code in codes" value="{{code.longLbl}}">
-                      {{code.longLbl}}
+                        {{code.longLbl}}
                     </option>
                 </select>
             </div>
         </div>
         <br>
-        <!-- <div class="row align-items-center">
-            <div class="col">
-                <div class="search">
-                    <form class="search-form">
-                        <input type="text" id='searchDetail' placeholder="Search for Doctors">
-                        <input type="submit" class="submitNearBy" ng-click="getMyLocation()" value="NearBy">
-                    </form>
-                </div>
-            </div>
-        </div> -->
         <div class="row">
             <div class="col">
-                <button ng-click="searchHcos()" class="btn btn-primary search-near-by"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                  </svg></i> Search NearBy</button>
+                <button ng-click="searchHcos()" class="btn btn-primary search-near-by"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-search" viewBox="0 0 16 16">
+                        <path
+                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                    </svg></i> Search NearBy</button>
             </div>
         </div>
-        <div  ng-if="hcoList.length > 0" ng-repeat="hco in hcoList">
+        <div ng-if="hcoList.length > 0" ng-repeat="hco in hcoList">
             <div class="row">
                 <div class="col">
                     <div class="card" style="width: 18rem;">
                         <img class="card-img-top" src="doc1.png" alt="Card image cap">
                         <div class="card-body">
-                            <h5 class="card-title">{{hco.activity.individual.firstName}}  {{hco.activity.individual.lastName}}</h5>
-                            <p class="card-text"><b>OfcAddress :</b> <i>{{hco.activity.workplace.address.longLabel}}, {{hco.activity.workplace.address.city.label}}, {{hco.activity.workplace.address.city.label}}, {{hco.activity.workplace.address.country}}</i></p>
-                            <a href="https://www.google.com/maps/search/?api=1&query={{hco.activity.workplace.address.location.lat}},{{hco.activity.workplace.address.location.lon}}"
-                            ><img src="location.png" height="33px">{{hco.calculatedDistance}} Km</a>
+                            <h5 class="card-title">{{hco.activity.individual.firstName}}
+                                {{hco.activity.individual.lastName}}</h5>
+                            <p class="card-text"><b>OfcAddress :</b> <i>{{hco.activity.workplace.address.longLabel}},
+                                    {{hco.activity.workplace.address.city.label}},
+                                    {{hco.activity.workplace.address.city.label}},
+                                    {{hco.activity.workplace.address.country}}</i></p>
+                            <a
+                                href="https://www.google.com/maps/search/?api=1&query={{hco.activity.workplace.address.location.lat}},{{hco.activity.workplace.address.location.lon}}"><img
+                                    src="location.png" height="33px">{{hco.calculatedDistance}} Km</a>
                             <button id="inquiry{{$index}}" class="btn btn-primary inquirybtn"
-                                ng-click='postInquiry($index, hco.activity.individual.firstName)' >Inquiry</button>
+                                ng-click='postInquiry($index, hco.activity.individual.firstName)'>Inquiry</button>
                         </div>
                     </div>
                 </div>
@@ -86,8 +98,11 @@
                 <b>Physician:</b> {{selectedDoctor}}<br>
                 <b>Patient Name :</b> <input id='Name' type="text">
                 <b>Inquiry :</b> <textarea id='Inquiry'></textarea><br>
-                <b>Contact Details :</b> <input id='ContactDetails' type="text">
-                <button style="padding:10px; margin-top: 22px;" ng-click="submitInquiry()" class="btn btn-primary">Submit
+                <b>Contact Details :</b> <input id='email' type="text">
+                <b>Appointment Date :</b><br>
+                <input id="date-time-picker" type="datetime-local" id="birthdaytime" name="appointmentDateTime">
+                <button style="padding:10px; margin-top: 22px;" ng-click="submitInquiry()"
+                    class="btn btn-primary">Submit
                     Inquiry</button><br>
                 <label style="color: green;" ng-show="submissionMsg !== ''">{{submissionMsg}} !!!!!</label>
             </div>

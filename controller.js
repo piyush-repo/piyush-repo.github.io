@@ -72,16 +72,38 @@ app.controller("myCtrl", function ($scope) {
         }
     }
 
-    $scope.submitInquiry = () => {
+
+    $scope.submitInquiry = async () => {
         $scope.submissionMsg = "";
         const name = document.getElementById('Name');
         const inquiryDetails = document.getElementById('Inquiry');
-        const contactDetails = document.getElementById('ContactDetails');
+        const email = document.getElementById('email');
+        const dateTimeDetails = document.getElementById('date-time-picker');
+        const dateInfo = dateTimeDetails.value.split('T');
+        await $scope.sendEmail({
+            dateInfo,
+            email : email.value
+        });
         $scope.submitIsEnabled = false;
         $scope.submissionMsg = "Submitted Successfully";
         name.value = '';
         inquiryDetails.value = '';
-        contactDetails.value = '';
+        email.value = '';
+        dateTimeDetails.value = '';
+    }
+
+    $scope.sendEmail = async ({dateInfo, email}) => {
+        const templateObj = {
+            email_to: email,
+            appName: "Medico",
+            to_name: "User",
+            Date: dateInfo[0],
+            Time: dateInfo[1]
+        }
+
+        return emailjs.send('service_ns717ag', 'template_3o59v2m', templateObj).then((response)=>{
+            console.log("Email sent Successfully");
+        });
     }
 
     $scope.getMyLocation = () => {
@@ -89,15 +111,16 @@ app.controller("myCtrl", function ($scope) {
             navigator.geolocation.getCurrentPosition(showPosition);
         }
         function showPosition(position) {
-            $scope.coordinates.lat = position.coords.latitude;
-            $scope.coordinates.long = position.coords.longitude;
+            // lat: 38.6358, lon: -77.2745
+            $scope.coordinates.lat = 40.704 ;//position.coords.latitude;
+            $scope.coordinates.long = -74.3093 ; //position.coords.longitude;
             console.log(JSON.stringify($scope.coordinates));
         }
     }
     //3001106b821f9048
 
     //30015ce4de47725d
-    $scope.hclAPI = new HclAPI({ apiKey: "30015d4934c30a75"});
+    $scope.hclAPI = new HclAPI({ apiKey: "30015d4934c30a75" });
 
 
 
@@ -118,9 +141,8 @@ app.controller("myCtrl", function ($scope) {
         // });
         $scope.activitiesWithDistance = $scope.activities.activities.map((record) => {
             record.calculatedDistance = Math.round(distance(
-                $scope.coordinates.lat, $scope.coordinates.long,
-                record.activity.workplace.address.location.lat,
-                record.activity.workplace.address.location.lon), 2);
+                $scope.coordinates.lat, record.activity.workplace.address.location.lat,
+                $scope.coordinates.long, record.activity.workplace.address.location.lon), 2);
             return record;
         });
         $scope.$apply();
@@ -142,8 +164,8 @@ app.controller("myCtrl", function ($scope) {
 
     $scope.searchHcos = () => {
         console.log($scope.selectedCategory);
-        const filteredList = $scope.activitiesWithDistance.filter((record)=>{
-            return _.find(record.activity.individual.specialties, {label : $scope.selectedCategory}) && record.calculatedDistance < distanceThreshold;
+        const filteredList = $scope.activitiesWithDistance.filter((record) => {
+            return _.find(record.activity.individual.specialties, { label: $scope.selectedCategory }) && record.calculatedDistance < distanceThreshold;
         })
         $scope.hcoList = _.orderBy(filteredList, 'calculatedDistance');
     }
