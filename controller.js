@@ -82,7 +82,10 @@ app.controller("myCtrl", function ($scope) {
         const dateInfo = dateTimeDetails.value.split('T');
         await $scope.sendEmail({
             dateInfo,
-            email : email.value
+            email : email.value,
+            name : name.value,
+            inquiryMsg: inquiryDetails.value,
+            doctor: $scope.selectedDoctor
         });
         $scope.submitIsEnabled = false;
         $scope.submissionMsg = "Submitted Successfully";
@@ -92,8 +95,11 @@ app.controller("myCtrl", function ($scope) {
         dateTimeDetails.value = '';
     }
 
-    $scope.sendEmail = async ({dateInfo, email}) => {
+    $scope.sendEmail = async ({dateInfo, email, name, inquiryMsg, doctor}) => {
         const templateObj = {
+            doctor,
+            inquiryMsg,
+            name,
             email_to: email,
             appName: "Medico",
             to_name: "User",
@@ -111,7 +117,6 @@ app.controller("myCtrl", function ($scope) {
             navigator.geolocation.getCurrentPosition(showPosition);
         }
         function showPosition(position) {
-            // lat: 38.6358, lon: -77.2745
             $scope.coordinates.lat = 40.704 ;//position.coords.latitude;
             $scope.coordinates.long = -74.3093 ; //position.coords.longitude;
             console.log(JSON.stringify($scope.coordinates));
@@ -139,6 +144,10 @@ app.controller("myCtrl", function ($scope) {
         //         record.activity.workplace.address.location.lon), 2);
         //     return record;
         // });
+        $scope.coordinates.lat = 40.704 ;//position.coords.latitude;
+        $scope.coordinates.long = -74.3093 ; //position.coords.longitude;
+        console.log(JSON.stringify($scope.coordinates));
+        
         $scope.activitiesWithDistance = $scope.activities.activities.map((record) => {
             record.calculatedDistance = Math.round(distance(
                 $scope.coordinates.lat, record.activity.workplace.address.location.lat,

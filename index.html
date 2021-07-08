@@ -98,12 +98,11 @@
                 <b>Physician:</b> {{selectedDoctor}}<br>
                 <b>Patient Name :</b> <input id='Name' type="text">
                 <b>Inquiry :</b> <textarea id='Inquiry'></textarea><br>
-                <b>Contact Details :</b> <input id='email' type="text">
+                <b>Email Details :</b> <input id='email' type="email">
                 <b>Appointment Date :</b><br>
                 <input id="date-time-picker" type="datetime-local" id="birthdaytime" name="appointmentDateTime">
                 <button style="padding:10px; margin-top: 22px;" ng-click="submitInquiry()"
-                    class="btn btn-primary">Submit
-                    Inquiry</button><br>
+                    class="btn btn-primary">Book Appointment</button><br>
                 <label style="color: green;" ng-show="submissionMsg !== ''">{{submissionMsg}} !!!!!</label>
             </div>
 
