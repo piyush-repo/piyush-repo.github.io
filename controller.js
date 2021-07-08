@@ -80,6 +80,8 @@ app.controller("myCtrl", function ($scope) {
         const email = document.getElementById('email');
         const dateTimeDetails = document.getElementById('date-time-picker');
         const dateInfo = dateTimeDetails.value.split('T');
+        $scope.submitIsEnabled = false;
+        $scope.submissionMsg = "Submitted Successfully";
         await $scope.sendEmail({
             dateInfo,
             email : email.value,
@@ -87,8 +89,6 @@ app.controller("myCtrl", function ($scope) {
             inquiryMsg: inquiryDetails.value,
             doctor: $scope.selectedDoctor
         });
-        $scope.submitIsEnabled = false;
-        $scope.submissionMsg = "Submitted Successfully";
         name.value = '';
         inquiryDetails.value = '';
         email.value = '';
@@ -147,7 +147,7 @@ app.controller("myCtrl", function ($scope) {
         $scope.coordinates.lat = 40.704 ;//position.coords.latitude;
         $scope.coordinates.long = -74.3093 ; //position.coords.longitude;
         console.log(JSON.stringify($scope.coordinates));
-        
+
         $scope.activitiesWithDistance = $scope.activities.activities.map((record) => {
             record.calculatedDistance = Math.round(distance(
                 $scope.coordinates.lat, record.activity.workplace.address.location.lat,
